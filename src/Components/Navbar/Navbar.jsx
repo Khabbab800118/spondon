@@ -1,10 +1,11 @@
 import React from "react";
+import { Link } from "react-router";
 
 const Navbar = () => {
   return (
     <div className="navbar bg-base-100 justify-between">
       <div className="">
-        <h3 className="btn btn-ghost text-3xl">SPONDON</h3>
+        <h3 className="btn btn-ghost text-3xl text-[#880808]">SPONDON</h3>
       </div>
       {/* <div className="flex gap-2">
         <div className="dropdown dropdown-end">
@@ -40,7 +41,9 @@ const Navbar = () => {
         </div>
       </div> */}
       <div>
-        <button className="btn">Login</button>
+        <Link to={"/auth/login"} className="btn">
+          Login
+        </Link>
       </div>
     </div>
   );
