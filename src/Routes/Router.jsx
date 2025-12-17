@@ -3,6 +3,8 @@ import HomeLayout from "../Layouts/HomeLayout/HomeLayout";
 import Home from "../Pages/Home/Home";
 import AuthLayout from "../Layouts/AuthLayout/AuthLayout";
 import Login from "../Pages/Login/Login";
+import Register from "../Pages/Register/Register";
+import Profile from "../Pages/Profile/Profile";
 
 const router = createBrowserRouter([
   {
@@ -12,6 +14,10 @@ const router = createBrowserRouter([
       {
         index: true,
         Component: Home,
+      },
+      {
+        path: "/profile",
+        Component: Profile,
       },
     ],
   },
@@ -23,16 +29,16 @@ const router = createBrowserRouter([
         path: "/auth/login",
         Component: Login,
       },
-    //   {
-    //     path: "/auth/register",
-    //     Component: Register,
-    //   },
-    //   {
-    //     path: "/auth/forgotPassword",
-    //     Component: ForgotPassword,
-    //   },
+      {
+        path: "/auth/register",
+        Component: Register,
+      },
+      //   {
+      //     path: "/auth/forgotPassword",
+      //     Component: ForgotPassword,
+      //   },
     ],
-  }
+  },
 ]);
 
 export default router;

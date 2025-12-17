@@ -1,6 +1,8 @@
-import React from "react";
+// import React, { useContext } from "react";
+// import { AuthContext } from "../../Provider/AuthContext";
 
 const Home = () => {
+  // const { user } = useContext(AuthContext);
   return (
     <div className="flex min-h-screen overflow-hidden">
       {/* Image Section */}

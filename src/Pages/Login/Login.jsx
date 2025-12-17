@@ -32,7 +32,7 @@ const Login = () => {
 
   return (
     <div className="hero bg-base-200 min-h-screen">
-      <title>toytopia-Log In</title>
+      <title>Spondon-Log In</title>
 
       <div className="hero-content flex-col lg:flex-row-reverse">
         <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl p-5">
