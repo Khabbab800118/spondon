@@ -26,7 +26,7 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="">
-        <Link to={"all-active-donors"} className="btn btn-ghost text-lg">
+        <Link to={"/all-active-donors"} className="btn btn-ghost text-lg">
           <FaHeart className="text-green-500" />
           All Active Donors
         </Link>

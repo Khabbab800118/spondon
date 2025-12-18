@@ -11,6 +11,7 @@ import DashboardRequests from "../Pages/Dashboard/DashboardRequests/DashboardReq
 import SentRequests from "../Components/SentRequests/SentRequests";
 import AllActiveDonors from "../Components/AllActiveDonors/AllActiveDonors";
 import Request from "../Components/Request/Request";
+import PrivateRoute from "../Components/PrivateRoute/PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -27,7 +28,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/request",
-        Component: Request,
+        element: (
+          <PrivateRoute>
+            <Request></Request>
+          </PrivateRoute>
+        ),
       },
     ],
   },
@@ -51,7 +56,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    Component: DashboardLayout,
+    element: (
+      <PrivateRoute>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRoute>
+    ),
     children: [
       {
         index: true,
