@@ -31,7 +31,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-base-200 flex items-center justify-center">
+    <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
       <div className="card bg-base-100 w-full max-w-md shadow-xl p-6">
         <div className="flex flex-col items-center">
           <img
@@ -52,10 +52,20 @@ const Profile = () => {
             </p>
 
             {dbUser.role === "donor" && (
-              <p>
-                <span className="font-semibold">Blood Group:</span>{" "}
-                {dbUser.bloodGroup || "Not set"}
-              </p>
+              <>
+                <p>
+                  <span className="font-semibold">Blood Group:</span>{" "}
+                  {dbUser.bloodGroup || "Not set"}
+                </p>
+                <p>
+                  <span className="font-semibold">District:</span>{" "}
+                  {dbUser.district || "Not set"}
+                </p>
+                <p>
+                  <span className="font-semibold">Area:</span>{" "}
+                  {dbUser.area || "Not set"}
+                </p>
+              </>
             )}
           </div>
         </div>

@@ -11,7 +11,21 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState("donor");
   const [bloodGroup, setBloodGroup] = useState("");
+  const [district, setDistrict] = useState("");
+  const [area, setArea] = useState("");
+
   const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+  const districts = [
+    "Dhaka",
+    "Chattogram",
+    "Khulna",
+    "Rajshahi",
+    "Barishal",
+    "Sylhet",
+    "Rangpur",
+    "Mymensingh",
+  ];
+
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
@@ -29,9 +43,20 @@ const Register = () => {
       return;
     }
 
-    if (role === "donor" && !bloodGroup) {
-      setError("Please select your blood group");
-      return;
+    // Donor-specific validation
+    if (role === "donor") {
+      if (!bloodGroup) {
+        setError("Please select your blood group");
+        return;
+      }
+      if (!district) {
+        setError("Please select your district");
+        return;
+      }
+      if (!area) {
+        setError("Please enter your area");
+        return;
+      }
     }
 
     try {
@@ -51,6 +76,8 @@ const Register = () => {
         image: photo,
         role,
         bloodGroup: role === "donor" ? bloodGroup : null,
+        district: role === "donor" ? district : null,
+        area: role === "donor" ? area : null,
       };
 
       const res = await axios.post("http://localhost:5000/users", newUser);
@@ -117,7 +144,6 @@ const Register = () => {
 
               {/* Role Selection */}
               <label className="label mt-2">Select Role</label>
-
               <div className="flex gap-6 mt-1">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -146,7 +172,6 @@ const Register = () => {
 
               {/* Blood Group */}
               <label className="label mt-2">Blood Group</label>
-
               <select
                 name="bloodGroup"
                 className="select select-bordered w-full"
@@ -163,9 +188,41 @@ const Register = () => {
                 ))}
               </select>
 
+              {/* District */}
+              <label className="label mt-2">District</label>
+              <select
+                name="district"
+                className="select select-bordered w-full"
+                value={district}
+                onChange={(e) => setDistrict(e.target.value)}
+                disabled={role === "volunteer"}
+                required={role === "donor"}
+              >
+                <option value="">Select District</option>
+                {districts.map((dist) => (
+                  <option key={dist} value={dist}>
+                    {dist}
+                  </option>
+                ))}
+              </select>
+
+              {/* Area */}
+              <label className="label mt-2">Area</label>
+              <input
+                type="text"
+                name="area"
+                className="input w-full"
+                placeholder="Enter your area"
+                value={area}
+                onChange={(e) => setArea(e.target.value)}
+                disabled={role === "volunteer"}
+                required={role === "donor"}
+              />
+
               {role === "volunteer" && (
                 <p className="text-xs text-gray-500 mt-1">
-                  Blood group is not required for volunteers
+                  Blood group, district, and area are not required for
+                  volunteers
                 </p>
               )}
 

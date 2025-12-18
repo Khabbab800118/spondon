@@ -5,6 +5,9 @@ import AuthLayout from "../Layouts/AuthLayout/AuthLayout";
 import Login from "../Pages/Login/Login";
 import Register from "../Pages/Register/Register";
 import Profile from "../Pages/Profile/Profile";
+import DashboardLayout from "../Layouts/DashboardLayout/DashboardLayout";
+import DashboardHome from "../Pages/Dashboard/DashboardHome/DashboardHome";
+import DashboardRequests from "../Pages/Dashboard/DashboardRequests/DashboardRequests";
 
 const router = createBrowserRouter([
   {
@@ -14,10 +17,6 @@ const router = createBrowserRouter([
       {
         index: true,
         Component: Home,
-      },
-      {
-        path: "/profile",
-        Component: Profile,
       },
     ],
   },
@@ -37,6 +36,24 @@ const router = createBrowserRouter([
       //     path: "/auth/forgotPassword",
       //     Component: ForgotPassword,
       //   },
+    ],
+  },
+  {
+    path: "/dashboard",
+    Component: DashboardLayout,
+    children: [
+      {
+        index: true,
+        Component: DashboardHome,
+      },
+      {
+        path: "/dashboard/profile",
+        Component: Profile,
+      },
+      {
+        path:"/dashboard/requests",
+        Component:DashboardRequests
+      }
     ],
   },
 ]);
