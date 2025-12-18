@@ -10,6 +10,7 @@ import DashboardHome from "../Pages/Dashboard/DashboardHome/DashboardHome";
 import DashboardRequests from "../Pages/Dashboard/DashboardRequests/DashboardRequests";
 import SentRequests from "../Components/SentRequests/SentRequests";
 import AllActiveDonors from "../Components/AllActiveDonors/AllActiveDonors";
+import Request from "../Components/Request/Request";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: "/all-active-donors",
         Component: AllActiveDonors,
+      },
+      {
+        path: "/request",
+        Component: Request,
       },
     ],
   },

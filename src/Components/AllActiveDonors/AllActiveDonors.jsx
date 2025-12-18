@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router";
 
 const AllActiveDonors = () => {
   const [donors, setDonors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [clickedDonors, setClickedDonors] = useState([]); // Track clicked donors
 
   useEffect(() => {
     const fetchDonors = async () => {
@@ -13,7 +13,6 @@ const AllActiveDonors = () => {
         setLoading(true);
         setError("");
         const res = await axios.get("http://localhost:5000/active-donors");
-        console.log("API response:", res.data);
 
         if (Array.isArray(res.data)) {
           setDonors(res.data);
@@ -32,14 +31,6 @@ const AllActiveDonors = () => {
 
     fetchDonors();
   }, []);
-
-  const handleSendRequest = (email) => {
-    // Here you can also make an API call to send the request if needed
-    console.log("Request sent to:", email);
-
-    // Add donor email to clickedDonors array to disable the button
-    setClickedDonors((prev) => [...prev, email]);
-  };
 
   if (loading)
     return <p className="text-center mt-10">Loading active donors...</p>;
@@ -97,13 +88,7 @@ const AllActiveDonors = () => {
 
           {/* Send Request Button */}
           <div className="card-actions p-4">
-            <button
-              className="btn btn-primary w-full"
-              onClick={() => handleSendRequest(donor.email)}
-              disabled={clickedDonors.includes(donor.email)}
-            >
-              {clickedDonors.includes(donor.email) ? "Request Sent" : "Send Request"}
-            </button>
+            <Link to={'/request'} className="btn">Click to send Request</Link>
           </div>
         </div>
       ))}
