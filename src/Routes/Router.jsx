@@ -13,6 +13,7 @@ import AllActiveDonors from "../Components/AllActiveDonors/AllActiveDonors";
 import Request from "../Components/Request/Request";
 import PrivateRoute from "../Components/PrivateRoute/PrivateRoute";
 import MyDonations from "../Components/MyDonations/MyDonations";
+import AcceptedRequests from "../Components/AcceptedRequests/AcceptedRequests";
 
 const router = createBrowserRouter([
   {
@@ -82,6 +83,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/my-donations",
         Component: MyDonations,
+      },
+      {
+        path: "/dashboard/accepted-requests",
+        Component: AcceptedRequests,
       },
     ],
   },
