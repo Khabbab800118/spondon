@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React from "react";
 import {
   FaUser,
   FaHeartbeat,
@@ -6,37 +6,24 @@ import {
   FaToggleOn,
   FaToggleOff,
 } from "react-icons/fa";
-import { NavLink } from "react-router";
-import { AuthContext } from "../../../Provider/AuthContext";
+import { Link, NavLink } from "react-router";
 import axios from "axios";
 
-const DonorDashboardAside = () => {
-  // State to toggle Active / Deactive
-  const [isActive, setIsActive] = useState(true);
-  const { user } = useContext(AuthContext);
-  const [dbUser, setDbUser] = useState(null);
-
-  useEffect(() => {
-    if (user?.email) {
-      axios
-        .get(`http://localhost:5000/users/${user.email}`)
-        .then((res) => setDbUser(res.data))
-        .catch((err) => console.error(err));
-    }
-  }, [user]);
-
+const DonorDashboardAside = ({ isActive, setIsActive, dbUser }) => {
   const handleToggle = async () => {
-    setIsActive(!isActive);
+    if (!dbUser) return; // Ensure user data is loaded
 
     try {
       if (!isActive) {
         // Activate donor
         await axios.post("http://localhost:5000/active-donors", dbUser);
+        setIsActive(true);
       } else {
         // Deactivate donor
         await axios.delete(
           `http://localhost:5000/active-donors/${dbUser.email}`
         );
+        setIsActive(false);
       }
     } catch (err) {
       console.error(err);
@@ -45,12 +32,11 @@ const DonorDashboardAside = () => {
 
   return (
     <aside className="w-64 min-h-screen bg-white shadow-lg p-6">
-      {/* Logo / Title */}
-      <h2 className="text-2xl font-bold text-red-600 mb-8">Donor Dashboard</h2>
+      <Link to={"/dashboard"} className="text-2xl font-bold text-red-600 mb-8">
+        Donor Dashboard
+      </Link>
 
-      {/* Navigation */}
       <nav className="space-y-4">
-        {/* Home Button */}
         <NavLink
           to="/"
           className={({ isActive }) =>
@@ -59,11 +45,9 @@ const DonorDashboardAside = () => {
             }`
           }
         >
-          <FaHome />
-          Home
+          <FaHome /> Home
         </NavLink>
 
-        {/* Profile */}
         <NavLink
           to="/dashboard/profile"
           className={({ isActive }) =>
@@ -72,11 +56,9 @@ const DonorDashboardAside = () => {
             }`
           }
         >
-          <FaUser />
-          Profile
+          <FaUser /> Profile
         </NavLink>
 
-        {/* Requests */}
         <NavLink
           to="/dashboard/requests"
           className={({ isActive }) =>
@@ -85,11 +67,9 @@ const DonorDashboardAside = () => {
             }`
           }
         >
-          <FaHeartbeat />
-          Requests
+          <FaHeartbeat /> Requests
         </NavLink>
 
-        {/* Active / Deactive Toggle */}
         <button
           onClick={handleToggle}
           className={`flex items-center gap-3 px-4 py-2 rounded-lg transition w-full ${
