@@ -5,6 +5,7 @@ import {
   FaHome,
   FaToggleOn,
   FaToggleOff,
+  FaHandHoldingHeart,
 } from "react-icons/fa";
 import { Link, NavLink } from "react-router";
 import axios from "axios";
@@ -79,6 +80,16 @@ const DonorDashboardAside = ({ isActive, setIsActive, dbUser }) => {
           }
         >
           <FaHeartbeat /> Requests
+        </NavLink>
+        <NavLink
+          to="/dashboard/my-donations"
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-4 py-2 rounded-lg transition ${
+              isActive ? "bg-red-600 text-white" : "hover:bg-red-100"
+            }`
+          }
+        >
+          <FaHandHoldingHeart /> My Donations
         </NavLink>
 
         <button

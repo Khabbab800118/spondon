@@ -22,6 +22,7 @@ const Request = () => {
   });
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
+  const [status, setStatus] = useState("");
 
   // Set requester name & email from logged-in user
   useEffect(() => {
@@ -71,9 +72,11 @@ const Request = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setStatus("pending");
     setSuccessMsg("");
     try {
-      await axios.post("http://localhost:5000/requests", formData);
+      const requestData = { ...formData, status: "pending" };
+      await axios.post("http://localhost:5000/requests", requestData);
       await showSuccess("Request submitted successfully!");
       setFormData((prev) => ({
         ...prev,
@@ -87,6 +90,7 @@ const Request = () => {
         donationDate: "",
         donationTime: "",
         message: "",
+        status: status,
       }));
     } catch (err) {
       console.error(err);

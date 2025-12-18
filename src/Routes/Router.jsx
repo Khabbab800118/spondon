@@ -12,6 +12,7 @@ import SentRequests from "../Components/SentRequests/SentRequests";
 import AllActiveDonors from "../Components/AllActiveDonors/AllActiveDonors";
 import Request from "../Components/Request/Request";
 import PrivateRoute from "../Components/PrivateRoute/PrivateRoute";
+import MyDonations from "../Components/MyDonations/MyDonations";
 
 const router = createBrowserRouter([
   {
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/sent-requests",
         Component: SentRequests,
+      },
+      {
+        path: "/dashboard/my-donations",
+        Component: MyDonations,
       },
     ],
   },
