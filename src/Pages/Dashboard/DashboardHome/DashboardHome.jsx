@@ -3,7 +3,6 @@ import { useOutletContext } from "react-router";
 
 const DashboardHome = () => {
   const { dbUser, isActive } = useOutletContext(); // Get isActive from DashboardLayout
-  console.log(dbUser);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-base-200 p-4">

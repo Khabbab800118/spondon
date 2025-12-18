@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router";
-import { FaHome, FaClipboardList, FaUser } from "react-icons/fa";
+import { FaHome, FaClipboardList, FaUser, FaPaperPlane } from "react-icons/fa";
 
 const VolunteerDashboardAside = () => {
   return (
@@ -29,14 +29,14 @@ const VolunteerDashboardAside = () => {
           <FaUser /> Profile
         </NavLink>
         <NavLink
-          to="/dashboard/tasks"
+          to="/dashboard/sent-requests"
           className={({ isActive }) =>
             `flex items-center gap-3 px-4 py-2 rounded-lg transition ${
               isActive ? "bg-blue-600 text-white" : "hover:bg-blue-100"
             }`
           }
         >
-          <FaClipboardList /> Assigned Tasks
+          <FaPaperPlane /> Sent Requests
         </NavLink>
       </nav>
     </aside>

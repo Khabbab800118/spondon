@@ -8,6 +8,8 @@ import Profile from "../Pages/Profile/Profile";
 import DashboardLayout from "../Layouts/DashboardLayout/DashboardLayout";
 import DashboardHome from "../Pages/Dashboard/DashboardHome/DashboardHome";
 import DashboardRequests from "../Pages/Dashboard/DashboardRequests/DashboardRequests";
+import SentRequests from "../Components/SentRequests/SentRequests";
+import AllActiveDonors from "../Components/AllActiveDonors/AllActiveDonors";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +19,10 @@ const router = createBrowserRouter([
       {
         index: true,
         Component: Home,
+      },
+      {
+        path: "/all-active-donors",
+        Component: AllActiveDonors,
       },
     ],
   },
@@ -51,9 +57,13 @@ const router = createBrowserRouter([
         Component: Profile,
       },
       {
-        path:"/dashboard/requests",
-        Component:DashboardRequests
-      }
+        path: "/dashboard/requests",
+        Component: DashboardRequests,
+      },
+      {
+        path: "/dashboard/sent-requests",
+        Component: SentRequests,
+      },
     ],
   },
 ]);

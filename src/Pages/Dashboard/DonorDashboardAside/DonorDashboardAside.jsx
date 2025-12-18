@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   FaUser,
   FaHeartbeat,
@@ -10,6 +10,17 @@ import { Link, NavLink } from "react-router";
 import axios from "axios";
 
 const DonorDashboardAside = ({ isActive, setIsActive, dbUser }) => {
+  useEffect(() => {
+    if (!dbUser?.email) return;
+
+    axios
+      .get(`http://localhost:5000/active-donors/${dbUser.email}`)
+      .then((res) => {
+        setIsActive(res.data.isActive);
+      })
+      .catch((err) => console.error(err));
+  }, [dbUser, setIsActive]);
+
   const handleToggle = async () => {
     if (!dbUser) return; // Ensure user data is loaded
 

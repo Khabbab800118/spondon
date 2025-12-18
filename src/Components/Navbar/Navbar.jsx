@@ -1,10 +1,12 @@
 import React, { useContext } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../Provider/AuthContext";
 import { showSuccess } from "../Alert/Alert";
+import { FaHeart } from "react-icons/fa";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
+  const navigator = useNavigate();
   const handleLogoutBtn = async () => {
     try {
       await logOut();
@@ -21,6 +23,12 @@ const Navbar = () => {
       <div className="">
         <Link to={"/"} className="btn btn-ghost text-3xl text-[#880808]">
           SPONDON
+        </Link>
+      </div>
+      <div className="">
+        <Link to={"all-active-donors"} className="btn btn-ghost text-lg">
+          <FaHeart className="text-green-500" />
+          All Active Donors
         </Link>
       </div>
       <div className="flex gap-3">
