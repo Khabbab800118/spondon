@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { FaTrash, FaToggleOn, FaToggleOff, FaUsers } from "react-icons/fa";
+import { AuthContext } from "../../Provider/AuthContext";
 
 const ManageUsers = () => {
+  const { user: currentUser } = useContext(AuthContext); // logged-in admin
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // 🔹 Fetch users (declare FIRST)
   const fetchUsers = async () => {
     try {
       setLoading(true);
@@ -21,19 +22,21 @@ const ManageUsers = () => {
     }
   };
 
-  // 🔹 Call fetchUsers
   useEffect(() => {
     fetchUsers();
   }, []);
 
-  // 🔹 Toggle enable / disable
   const handleToggleStatus = async (id, currentStatus) => {
+    // Prevent self-disable
+    if (currentUser?.email === users.find((u) => u._id === id)?.email) {
+      alert("You cannot disable yourself!");
+      return;
+    }
+
     try {
       await axios.patch(`http://localhost:5000/users/${id}`, {
         isDisabled: !currentStatus,
       });
-
-      // Update UI immediately
       setUsers((prev) =>
         prev.map((user) =>
           user._id === id ? { ...user, isDisabled: !currentStatus } : user
@@ -44,8 +47,13 @@ const ManageUsers = () => {
     }
   };
 
-  // 🔹 Delete user
   const handleDeleteUser = async (id) => {
+    // Prevent self-delete
+    if (currentUser?.email === users.find((u) => u._id === id)?.email) {
+      alert("You cannot delete yourself!");
+      return;
+    }
+
     const confirmed = window.confirm(
       "Are you sure you want to delete this user?"
     );
@@ -53,24 +61,17 @@ const ManageUsers = () => {
 
     try {
       await axios.delete(`http://localhost:5000/users/${id}`);
-
-      // Remove from UI
       setUsers((prev) => prev.filter((user) => user._id !== id));
     } catch (err) {
       console.error(err);
     }
   };
 
-  // 🔹 Loading & error states
-  if (loading) {
-    return <p className="text-center mt-10">Loading users...</p>;
-  }
-
-  if (error) {
+  if (loading) return <p className="text-center mt-10">Loading users...</p>;
+  if (error)
     return (
       <p className="text-center mt-10 text-red-500 font-semibold">{error}</p>
     );
-  }
 
   return (
     <div className="p-4">
@@ -95,12 +96,8 @@ const ManageUsers = () => {
             {users.map((user, index) => (
               <tr key={user._id} className="hover">
                 <td>{index + 1}</td>
-
                 <td>{user.name || "N/A"}</td>
-
                 <td>{user.email}</td>
-
-                {/* Role */}
                 <td>
                   <span
                     className={`px-3 py-1 rounded-full text-sm capitalize ${
@@ -114,8 +111,6 @@ const ManageUsers = () => {
                     {user.role}
                   </span>
                 </td>
-
-                {/* Status */}
                 <td>
                   <span
                     className={`px-3 py-1 rounded-full text-sm ${
@@ -127,10 +122,8 @@ const ManageUsers = () => {
                     {user.isDisabled ? "Disabled" : "Enabled"}
                   </span>
                 </td>
-
-                {/* Actions */}
                 <td className="flex justify-center gap-4">
-                  {/* Toggle */}
+                  {/* Toggle (disabled for self) */}
                   <button
                     onClick={() =>
                       handleToggleStatus(user._id, user.isDisabled)
@@ -138,19 +131,25 @@ const ManageUsers = () => {
                     className={`text-2xl ${
                       user.isDisabled ? "text-gray-500" : "text-green-500"
                     }`}
-                    title="Enable / Disable"
+                    title={
+                      currentUser?.email === user.email
+                        ? "Cannot disable yourself"
+                        : "Enable / Disable"
+                    }
                   >
                     {user.isDisabled ? <FaToggleOff /> : <FaToggleOn />}
                   </button>
 
-                  {/* Delete */}
-                  <button
-                    onClick={() => handleDeleteUser(user._id)}
-                    className="text-red-500 text-lg"
-                    title="Delete User"
-                  >
-                    <FaTrash />
-                  </button>
+                  {/* Delete (hidden for self) */}
+                  {currentUser?.email !== user.email && (
+                    <button
+                      onClick={() => handleDeleteUser(user._id)}
+                      className="text-red-500 text-lg"
+                      title="Delete User"
+                    >
+                      <FaTrash />
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}

@@ -6,6 +6,7 @@ import {
   FaToggleOn,
   FaToggleOff,
   FaHandHoldingHeart,
+  FaArrowAltCircleLeft,
 } from "react-icons/fa";
 import { Link, NavLink } from "react-router";
 import axios from "axios";
@@ -44,6 +45,12 @@ const DonorDashboardAside = ({ isActive, setIsActive, dbUser }) => {
 
   return (
     <aside className="w-64 min-h-screen bg-white shadow-lg p-6">
+      <Link
+        to="/"
+        className="text-2xl font-bold text-red-600 mb-8 block text-center"
+      >
+        <FaArrowAltCircleLeft></FaArrowAltCircleLeft> Home Page
+      </Link>
       <Link to={"/dashboard"} className="text-2xl font-bold text-red-600 mb-8">
         Donor Dashboard
       </Link>

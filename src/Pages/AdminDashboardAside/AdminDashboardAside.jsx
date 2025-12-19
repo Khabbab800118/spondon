@@ -6,12 +6,16 @@ import {
   FaHandHoldingHeart,
   FaHeartbeat,
   FaChartBar,
+  FaArrowAltCircleLeft,
 } from "react-icons/fa";
 import { Link, NavLink } from "react-router";
 
 const AdminDashboardAside = () => {
   return (
     <aside className="w-64 min-h-screen bg-white shadow-lg p-6">
+      <Link to="/" className="text-2xl font-bold text-red-600 mb-8 block">
+        <FaArrowAltCircleLeft></FaArrowAltCircleLeft> Home Page
+      </Link>
       <Link
         to="/dashboard"
         className="text-2xl font-bold text-red-600 mb-8 block"
@@ -22,7 +26,7 @@ const AdminDashboardAside = () => {
       <nav className="space-y-4">
         {/* Home */}
         <NavLink
-          to="/"
+          to="/dashboard"
           className={({ isActive }) =>
             `flex items-center gap-3 px-4 py-2 rounded-lg transition ${
               isActive ? "bg-red-600 text-white" : "hover:bg-red-100"

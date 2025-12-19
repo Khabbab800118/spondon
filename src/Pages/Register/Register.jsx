@@ -1,18 +1,23 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { AuthContext } from "../../Provider/AuthContext";
 import { showSuccess } from "../../Components/Alert/Alert";
 import axios from "axios";
 
 const Register = () => {
   const { createUser, setUser, updateUser } = useContext(AuthContext);
+
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
   const [role, setRole] = useState("donor");
   const [bloodGroup, setBloodGroup] = useState("");
   const [district, setDistrict] = useState("");
   const [area, setArea] = useState("");
+
+  const navigate = useNavigate();
 
   const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
   const districts = [
@@ -26,67 +31,72 @@ const Register = () => {
     "Mymensingh",
   ];
 
-  const navigate = useNavigate();
-
   const handleRegister = async (e) => {
     e.preventDefault();
-
-    const form = e.target;
-    const name = form.name.value;
-    const photo = form.photo.value;
-    const email = form.email.value;
-    const password = form.password.value;
-
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z]).{6,}$/;
-    if (!passwordRegex.test(password)) {
-      setError("Password must have uppercase, lowercase, and be 6+ characters");
-      return;
-    }
-
-    // Donor-specific validation
-    if (role === "donor") {
-      if (!bloodGroup) {
-        setError("Please select your blood group");
-        return;
-      }
-      if (!district) {
-        setError("Please select your district");
-        return;
-      }
-      if (!area) {
-        setError("Please enter your area");
-        return;
-      }
-    }
+    setError("");
+    setLoading(true);
 
     try {
+      const form = e.target;
+      const name = form.name.value;
+      const email = form.email.value;
+      const password = form.password.value;
+      const file = form.photo.files[0];
+
+      // 🔐 Password validation
+      const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z]).{6,}$/;
+      if (!passwordRegex.test(password)) {
+        setError(
+          "Password must contain uppercase, lowercase and be at least 6 characters"
+        );
+        setLoading(false);
+        return;
+      }
+
+      // 🩸 Donor validation
+      if (role === "donor") {
+        if (!bloodGroup || !district || !area) {
+          setError("Please complete all donor information");
+          setLoading(false);
+          return;
+        }
+      }
+
+      // 🖼️ Image upload
+      const imgbbKey = import.meta.env.VITE_IMGBB_API_KEY;
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const imgRes = await axios.post(
+        `https://api.imgbb.com/1/upload?key=${imgbbKey}`,
+        formData
+      );
+
+      const photoURL = imgRes.data.data.display_url;
+
+      // 🔑 Create auth user
       const result = await createUser(email, password);
       const user = result.user;
 
       await updateUser({
         displayName: name,
-        photoURL: photo,
+        photoURL,
       });
 
-      setUser({ ...user, displayName: name, photoURL: photo });
+      setUser({ ...user, displayName: name, photoURL });
 
+      // 💾 Save user to DB
       const newUser = {
         name,
         email,
-        image: photo,
+        image: photoURL,
         role,
         bloodGroup: role === "donor" ? bloodGroup : null,
         district: role === "donor" ? district : null,
         area: role === "donor" ? area : null,
       };
 
-      const res = await axios.post("http://localhost:5000/users", newUser);
-      const data = res.data;
-
-      if (data.message === "User Already Exists") {
-        setError("User Already Exists");
-        return;
-      }
+      await axios.post("http://localhost:5000/users", newUser);
 
       await showSuccess(
         "Registration Successful!",
@@ -97,161 +107,176 @@ const Register = () => {
     } catch (err) {
       if (err.code === "auth/email-already-in-use") {
         setError("User already exists!");
-        return;
+      } else {
+        setError(err.message);
       }
-      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="hero bg-base-200 min-h-screen">
-      <title>Spondon-Register</title>
+      <title>Spondon | Register</title>
 
-      <div className="hero-content flex-col lg:flex-row-reverse">
-        <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl p-5">
-          <h1 className="text-5xl font-bold">Register now!</h1>
-          <form onSubmit={handleRegister} className="card-body">
-            <fieldset className="fieldset">
+      <div className="hero-content flex-col">
+        <div className="card bg-base-100 w-full max-w-sm shadow-2xl">
+          <div className="card-body">
+            <h1 className="text-3xl font-bold text-center mb-4">
+              Register Now
+            </h1>
+
+            <form onSubmit={handleRegister}>
               {/* Name */}
               <label className="label">Name</label>
               <input
+                disabled={loading}
                 required
                 name="name"
                 type="text"
-                className="input"
-                placeholder="Name"
+                className="input input-bordered w-full"
+                placeholder="Your name"
               />
 
               {/* Photo */}
-              <label className="label">Photo URL</label>
+              <label className="label mt-2">Photo</label>
               <input
+                disabled={loading}
                 required
                 name="photo"
-                type="text"
-                className="input"
-                placeholder="Photo URL"
+                type="file"
+                className="file-input file-input-bordered w-full"
               />
 
               {/* Email */}
-              <label className="label">Email</label>
+              <label className="label mt-2">Email</label>
               <input
+                disabled={loading}
                 required
                 name="email"
                 type="email"
-                className="input"
+                className="input input-bordered w-full"
                 placeholder="Email"
               />
 
-              {/* Role Selection */}
-              <label className="label mt-2">Select Role</label>
-              <div className="flex gap-6 mt-1">
-                <label className="flex items-center gap-2 cursor-pointer">
+              {/* Role */}
+              <label className="label mt-2">Role</label>
+              <div className="flex gap-6">
+                <label className="flex items-center gap-2">
                   <input
+                    disabled={loading}
                     type="radio"
-                    name="role"
                     value="donor"
                     checked={role === "donor"}
                     onChange={(e) => setRole(e.target.value)}
                     className="radio radio-error"
                   />
-                  <span>Donor</span>
+                  Donor
                 </label>
 
-                <label className="flex items-center gap-2 cursor-pointer">
+                <label className="flex items-center gap-2">
                   <input
+                    disabled={loading}
                     type="radio"
-                    name="role"
                     value="volunteer"
                     checked={role === "volunteer"}
                     onChange={(e) => setRole(e.target.value)}
                     className="radio radio-error"
                   />
-                  <span>Volunteer</span>
+                  Volunteer
                 </label>
               </div>
 
-              {/* Blood Group */}
+              {/* Donor Fields */}
               <label className="label mt-2">Blood Group</label>
               <select
-                name="bloodGroup"
+                disabled={loading || role === "volunteer"}
+                required={role === "donor"}
                 className="select select-bordered w-full"
                 value={bloodGroup}
                 onChange={(e) => setBloodGroup(e.target.value)}
-                disabled={role === "volunteer"}
-                required={role === "donor"}
               >
-                <option value="">Select Blood Group</option>
-                {bloodGroups.map((group) => (
-                  <option key={group} value={group}>
-                    {group}
+                <option value="">Select blood group</option>
+                {bloodGroups.map((bg) => (
+                  <option key={bg} value={bg}>
+                    {bg}
                   </option>
                 ))}
               </select>
 
-              {/* District */}
               <label className="label mt-2">District</label>
               <select
-                name="district"
+                disabled={loading || role === "volunteer"}
+                required={role === "donor"}
                 className="select select-bordered w-full"
                 value={district}
                 onChange={(e) => setDistrict(e.target.value)}
-                disabled={role === "volunteer"}
-                required={role === "donor"}
               >
-                <option value="">Select District</option>
-                {districts.map((dist) => (
-                  <option key={dist} value={dist}>
-                    {dist}
+                <option value="">Select district</option>
+                {districts.map((d) => (
+                  <option key={d} value={d}>
+                    {d}
                   </option>
                 ))}
               </select>
 
-              {/* Area */}
               <label className="label mt-2">Area</label>
               <input
-                type="text"
-                name="area"
-                className="input w-full"
-                placeholder="Enter your area"
+                disabled={loading || role === "volunteer"}
+                required={role === "donor"}
+                className="input input-bordered w-full"
                 value={area}
                 onChange={(e) => setArea(e.target.value)}
-                disabled={role === "volunteer"}
-                required={role === "donor"}
+                placeholder="Your area"
               />
 
-              {role === "volunteer" && (
-                <p className="text-xs text-gray-500 mt-1">
-                  Blood group, district, and area are not required for
-                  volunteers
-                </p>
-              )}
-
               {/* Password */}
-              <label className="label">Password</label>
+              <label className="label mt-2">Password</label>
               <div className="relative">
                 <input
+                  disabled={loading}
                   required
                   name="password"
                   type={showPassword ? "text" : "password"}
-                  className="input w-full"
-                  placeholder="Password"
+                  className="input input-bordered w-full"
                 />
                 <span
-                  className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </span>
               </div>
 
-              <button type="submit" className="btn btn-neutral mt-4">
-                Register
+              {/* Error */}
+              {error && (
+                <p className="text-red-600 text-sm mt-2 text-center">{error}</p>
+              )}
+
+              {/* Submit */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="btn btn-neutral w-full mt-4"
+              >
+                {loading ? (
+                  <>
+                    <span className="loading loading-spinner loading-sm"></span>
+                    Registering...
+                  </>
+                ) : (
+                  "Register"
+                )}
               </button>
-              <small className="text-center mt-5 text-red-800">
-                {error ? error : ""}
-              </small>
-            </fieldset>
-          </form>
+
+              <p className="text-center mt-3 text-sm">
+                Already have an account?{" "}
+                <Link to="/auth/login" className="text-error font-semibold">
+                  Login
+                </Link>
+              </p>
+            </form>
+          </div>
         </div>
       </div>
     </div>

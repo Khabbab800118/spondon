@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { AuthContext } from "../../../Provider/AuthContext";
+import { showSuccess } from "../../../Components/Alert/Alert";
 
 const DashboardRequests = () => {
   const { user } = useContext(AuthContext);
@@ -54,10 +55,10 @@ const DashboardRequests = () => {
       // Remove the approved request from the UI immediately
       setRequests((prev) => prev.filter((req) => req._id !== id));
 
-      alert("Request accepted successfully!");
+      showSuccess("Request accepted successfully!");
     } catch (err) {
       console.error(err);
-      alert("Failed to accept request");
+      showSuccess("Failed to accept request");
     }
   };
 

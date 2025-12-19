@@ -8,6 +8,7 @@ import {
   FaTint,
   FaTrash,
 } from "react-icons/fa";
+import { showSuccess } from "../Alert/Alert";
 
 const ManageDonations = () => {
   const [donations, setDonations] = useState([]);
@@ -45,7 +46,7 @@ const ManageDonations = () => {
       setDonations((prev) => prev.filter((donation) => donation._id !== id));
     } catch (err) {
       console.error(err);
-      alert("Failed to delete donation");
+      showSuccess("Failed to delete donation");
     }
   };
 

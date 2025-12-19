@@ -8,6 +8,7 @@ import {
   FaTint,
   FaTrash,
 } from "react-icons/fa";
+import { showSuccess } from "../Alert/Alert";
 
 const ManageRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -45,7 +46,7 @@ const ManageRequests = () => {
       setRequests((prev) => prev.filter((req) => req._id !== id));
     } catch (err) {
       console.error(err);
-      alert("Failed to delete request");
+      showSuccess("Failed to delete request");
     }
   };
 
