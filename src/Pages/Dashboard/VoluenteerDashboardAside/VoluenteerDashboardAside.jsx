@@ -1,5 +1,11 @@
 import { Link, NavLink } from "react-router";
-import { FaHome, FaClipboardList, FaUser, FaPaperPlane } from "react-icons/fa";
+import {
+  FaHome,
+  FaClipboardList,
+  FaUser,
+  FaPaperPlane,
+  FaHourglassHalf,
+} from "react-icons/fa";
 import { FaCircleCheck } from "react-icons/fa6";
 
 const VolunteerDashboardAside = () => {
@@ -28,6 +34,16 @@ const VolunteerDashboardAside = () => {
           }
         >
           <FaUser /> Profile
+        </NavLink>
+        <NavLink
+          to="/dashboard/sent-requests"
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-4 py-2 rounded-lg transition ${
+              isActive ? "bg-blue-600 text-white" : "hover:bg-blue-100"
+            }`
+          }
+        >
+          <FaHourglassHalf /> Pending Requests
         </NavLink>
         <NavLink
           to="/dashboard/accepted-requests"

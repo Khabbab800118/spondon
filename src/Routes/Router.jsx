@@ -15,6 +15,8 @@ import PrivateRoute from "../Components/PrivateRoute/PrivateRoute";
 import MyDonations from "../Components/MyDonations/MyDonations";
 import AcceptedRequests from "../Components/AcceptedRequests/AcceptedRequests";
 import ManageUsers from "../Components/ManageUsers/ManageUsers";
+import ManageRequests from "../Components/ManageRequests/ManageRequests";
+import ManageDonations from "../Components/ManageDonations/ManageDonations";
 
 const router = createBrowserRouter([
   {
@@ -92,6 +94,14 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/manage-users",
         Component: ManageUsers,
+      },
+      {
+        path: "/dashboard/manage-requests",
+        Component: ManageRequests,
+      },
+      {
+        path: "/dashboard/manage-donations",
+        Component: ManageDonations,
       },
     ],
   },
