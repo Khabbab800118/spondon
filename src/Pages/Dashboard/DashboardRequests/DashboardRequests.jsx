@@ -4,59 +4,56 @@ import { AuthContext } from "../../../Provider/AuthContext";
 import { showSuccess } from "../../../Components/Alert/Alert";
 
 const DashboardRequests = () => {
-  const { user } = useContext(AuthContext);
-  const email = user?.email;
-
+  const { user: authUser } = useContext(AuthContext); // logged-in donor from AuthContext
+  const [donor, setDonor] = useState(null); // donor data from backend
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!email) return;
+    if (!authUser?.email) return;
 
-    const fetchRequestsForDonor = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
         setError("");
 
-        // 1️⃣ Get user data to retrieve bloodGroup
-        const userRes = await axios.get(
-          `https://spondon-server.onrender.com/users/${email}`
+        // 1️⃣ Fetch donor data from MongoDB
+        const donorRes = await axios.get(
+          `https://spondon-server.onrender.com/users/${authUser.email}`
         );
-        const bloodGroup = userRes.data?.bloodGroup;
+        setDonor(donorRes.data);
 
-        if (!bloodGroup) {
-          setError("User blood group not found");
-          setRequests([]);
-          return;
-        }
-
-        // 2️⃣ Fetch all requests matching donor's blood group
+        // 2️⃣ Fetch all requests
         const requestsRes = await axios.get(
-          `https://spondon-server.onrender.com/requests?bloodGroup=${bloodGroup}`
+          `https://spondon-server.onrender.com/requests`
         );
 
-        setRequests(Array.isArray(requestsRes.data) ? requestsRes.data : []);
+        // 3️⃣ Filter requests to match donor's blood group
+        const donorBloodGroup = donorRes.data?.bloodGroup;
+        const filteredRequests = Array.isArray(requestsRes.data)
+          ? requestsRes.data.filter((req) => req.bloodGroup === donorBloodGroup)
+          : [];
+
+        setRequests(filteredRequests);
       } catch (err) {
         console.error(err);
-        setError("Failed to load requests");
+        setError("Failed to load donor or requests data");
         setRequests([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchRequestsForDonor();
-  }, [email]);
+    fetchData();
+  }, [authUser?.email]);
 
-  // ✅ Accept request handler
   const handleAcceptRequest = async (id) => {
     try {
       await axios.patch(
         `https://spondon-server.onrender.com/requests/approve/${id}`
       );
 
-      // Remove the approved request from the UI immediately
       setRequests((prev) => prev.filter((req) => req._id !== id));
 
       showSuccess("Request accepted successfully!");
@@ -66,17 +63,18 @@ const DashboardRequests = () => {
     }
   };
 
-  if (loading) return <p>Loading requests...</p>;
+  if (loading) return <p>Loading data...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
+  if (!donor) return <p>Donor data not found.</p>;
 
   return (
     <div className="max-w-5xl mx-auto">
       <h2 className="text-2xl font-semibold mb-6">
-        Blood Requests Matching You
+        Requests Matching Your Blood Group ({donor.bloodGroup})
       </h2>
 
       {requests.length === 0 ? (
-        <p>No matching requests found</p>
+        <p>No requests matching your blood group.</p>
       ) : (
         <div className="space-y-5">
           {requests.map((req) => (
@@ -121,7 +119,6 @@ const DashboardRequests = () => {
                   </span>
                 </p>
 
-                {/* ✅ Accept Request Button */}
                 {req.status === "pending" && (
                   <button
                     className="btn bg-green-500 text-white mt-2"

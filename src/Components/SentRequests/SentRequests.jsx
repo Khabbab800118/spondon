@@ -9,16 +9,20 @@ const SentRequests = () => {
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null);
 
-  // Fetch user's requests
+  // Fetch all requests and filter by logged-in user
   useEffect(() => {
     const fetchMyRequests = async () => {
       if (!user?.email) return;
 
       try {
         const res = await axios.get(
-          `https://spondon-server.onrender.com/requests/user/${user.email}`
+          "https://spondon-server.onrender.com/requests"
         );
-        setRequests(res.data);
+        // Filter requests that belong to this user (volunteer)
+        const myRequests = res.data.filter(
+          (req) => req.requesterEmail === user.email
+        );
+        setRequests(myRequests);
       } catch (err) {
         console.error(err);
       } finally {
@@ -29,8 +33,9 @@ const SentRequests = () => {
     fetchMyRequests();
   }, [user]);
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this request?"))
+  // Handle cancel/delete request
+  const handleCancel = async (id) => {
+    if (!window.confirm("Are you sure you want to cancel this request?"))
       return;
 
     try {
@@ -38,9 +43,10 @@ const SentRequests = () => {
       await axios.delete(`https://spondon-server.onrender.com/requests/${id}`);
       // Remove the deleted request from state
       setRequests((prev) => prev.filter((req) => req._id !== id));
+      showSuccess("Request canceled successfully");
     } catch (err) {
       console.error(err);
-      await showSuccess("Failed to delete request");
+      showSuccess("Failed to cancel request");
     } finally {
       setDeletingId(null);
     }
@@ -51,14 +57,12 @@ const SentRequests = () => {
   }
 
   if (requests.length === 0) {
-    return (
-      <p className="text-center mt-6">You have not made any requests yet.</p>
-    );
+    return <p className="text-center mt-6">You have no pending requests.</p>;
   }
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-6">My Sent Requests</h2>
+      <h2 className="text-2xl font-bold mb-6">My Pending Requests</h2>
       <div className="flex flex-wrap gap-6">
         {requests.map((req) => (
           <div
@@ -86,13 +90,13 @@ const SentRequests = () => {
               <strong>Message:</strong> {req.message}
             </p>
 
-            {/* Delete Button */}
+            {/* Cancel Request Button */}
             <button
-              onClick={() => handleDelete(req._id)}
+              onClick={() => handleCancel(req._id)}
               disabled={deletingId === req._id}
               className="mt-4 w-full bg-red-600 text-white p-2 rounded hover:bg-red-700"
             >
-              {deletingId === req._id ? "Deleting..." : "Delete Request"}
+              {deletingId === req._id ? "Cancelling..." : "Cancel Request"}
             </button>
           </div>
         ))}
