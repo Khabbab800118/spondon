@@ -4,12 +4,13 @@ import axios from "axios";
 import DonorDashboardAside from "../../Pages/Dashboard/DonorDashboardAside/DonorDashboardAside";
 import VolunteerDashboardAside from "../../Pages/Dashboard/VoluenteerDashboardAside/VoluenteerDashboardAside";
 import { Outlet } from "react-router";
+import AdminDashboardAside from "../../Pages/AdminDashboardAside/AdminDashboardAside";
 
 const DashboardLayout = () => {
   const { user } = useContext(AuthContext);
   const [dbUser, setDbUser] = useState(null);
 
-  // Only for donor: active status
+  // Only for donor
   const [isActive, setIsActive] = useState(false);
 
   // Fetch user from backend
@@ -22,7 +23,7 @@ const DashboardLayout = () => {
     }
   }, [user]);
 
-  // Only for donor: check if active in activeDonors collection
+  // Check donor active status
   useEffect(() => {
     if (dbUser?.email && dbUser.role === "donor") {
       axios
@@ -34,18 +35,27 @@ const DashboardLayout = () => {
 
   if (!dbUser) return <p className="text-center mt-10">Loading dashboard...</p>;
 
+  // 🔹 Sidebar selection using if–else
+  let sidebar = null;
+
+  if (dbUser.role === "donor") {
+    sidebar = (
+      <DonorDashboardAside
+        dbUser={dbUser}
+        isActive={isActive}
+        setIsActive={setIsActive}
+      />
+    );
+  } else if (dbUser.role === "volunteer") {
+    sidebar = <VolunteerDashboardAside dbUser={dbUser} />;
+  } else if (dbUser.role === "admin") {
+    sidebar = <AdminDashboardAside dbUser={dbUser} />;
+  }
+
   return (
     <div className="flex min-h-screen">
-      {/* Conditional Sidebar */}
-      {dbUser.role === "donor" ? (
-        <DonorDashboardAside
-          dbUser={dbUser}
-          isActive={isActive}
-          setIsActive={setIsActive}
-        />
-      ) : (
-        <VolunteerDashboardAside dbUser={dbUser} />
-      )}
+      {/* Sidebar */}
+      {sidebar}
 
       {/* Main content */}
       <main className="flex-1 p-6">
