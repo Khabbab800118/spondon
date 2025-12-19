@@ -14,6 +14,7 @@ import Request from "../Components/Request/Request";
 import PrivateRoute from "../Components/PrivateRoute/PrivateRoute";
 import MyDonations from "../Components/MyDonations/MyDonations";
 import AcceptedRequests from "../Components/AcceptedRequests/AcceptedRequests";
+import ManageUsers from "../Components/ManageUsers/ManageUsers";
 
 const router = createBrowserRouter([
   {
@@ -87,6 +88,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/accepted-requests",
         Component: AcceptedRequests,
+      },
+      {
+        path: "/dashboard/manage-users",
+        Component: ManageUsers,
       },
     ],
   },
