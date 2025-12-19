@@ -18,7 +18,7 @@ const DashboardLayout = () => {
   useEffect(() => {
     if (user?.email) {
       axios
-        .get(`http://localhost:5000/users/${user.email}`)
+        .get(`https://spondon-server.onrender.com/users/${user.email}`)
         .then((res) => setDbUser(res.data))
         .catch((err) => console.error(err));
     }
@@ -28,7 +28,9 @@ const DashboardLayout = () => {
   useEffect(() => {
     if (dbUser?.email && dbUser.role === "donor") {
       axios
-        .get(`http://localhost:5000/active-donors/${dbUser.email}`)
+        .get(
+          `https://spondon-server.onrender.com/active-donors/${dbUser.email}`
+        )
         .then((res) => setIsActive(!!res.data))
         .catch(() => setIsActive(false));
     }

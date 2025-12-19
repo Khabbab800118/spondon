@@ -19,7 +19,9 @@ const ManageDonations = () => {
   const fetchDonations = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/approved-requests");
+      const res = await axios.get(
+        "https://spondon-server.onrender.com/approved-requests"
+      );
       setDonations(res.data);
     } catch (err) {
       console.error(err);
@@ -41,7 +43,9 @@ const ManageDonations = () => {
     if (!confirmed) return;
 
     try {
-      await axios.delete(`http://localhost:5000/approved-requests/${id}`);
+      await axios.delete(
+        `https://spondon-server.onrender.com/approved-requests/${id}`
+      );
       // Remove from UI
       setDonations((prev) => prev.filter((donation) => donation._id !== id));
     } catch (err) {

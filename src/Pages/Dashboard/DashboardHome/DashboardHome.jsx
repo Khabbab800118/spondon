@@ -26,17 +26,22 @@ const DashboardHome = () => {
             </div>
           )}
         </div>
+      ) : dbUser.role === "admin" ? (
+        <div className="bg-blue-100 border border-blue-400 text-blue-800 px-6 py-4 rounded-lg shadow-md text-center max-w-xl">
+          <h2 className="text-2xl font-bold mb-2">Welcome, Admin!</h2>
+          <p className="text-lg">
+            Here you can manage users, donors, and blood requests. Monitor
+            activities, approve or deactivate accounts, and keep the blood
+            donation system running smoothly.
+          </p>
+        </div>
       ) : (
-        <div>
-          <div className="min-h-screen flex flex-col items-center justify-center bg-base-200 p-4">
-            <h1 className="text-3xl font-bold mb-4">
-              Welcome, {dbUser?.name}!
-            </h1>
-            <p className="text-lg text-gray-700">
-              This is your volunteer dashboard. Here you can view assigned
-              tasks, volunteer requests, and manage your availability.
-            </p>
-          </div>
+        <div className="min-h-screen flex flex-col items-center justify-center bg-base-200 p-4">
+          <h1 className="text-3xl font-bold mb-4">Welcome, {dbUser?.name}!</h1>
+          <p className="text-lg text-gray-700">
+            This is your volunteer dashboard. Here you can view assigned tasks,
+            volunteer requests, and manage your availability.
+          </p>
         </div>
       )}
     </div>

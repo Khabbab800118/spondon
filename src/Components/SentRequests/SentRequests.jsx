@@ -16,7 +16,7 @@ const SentRequests = () => {
 
       try {
         const res = await axios.get(
-          `http://localhost:5000/requests/user/${user.email}`
+          `https://spondon-server.onrender.com/requests/user/${user.email}`
         );
         setRequests(res.data);
       } catch (err) {
@@ -35,7 +35,7 @@ const SentRequests = () => {
 
     try {
       setDeletingId(id);
-      await axios.delete(`http://localhost:5000/requests/${id}`);
+      await axios.delete(`https://spondon-server.onrender.com/requests/${id}`);
       // Remove the deleted request from state
       setRequests((prev) => prev.filter((req) => req._id !== id));
     } catch (err) {

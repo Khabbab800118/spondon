@@ -20,7 +20,9 @@ const DashboardRequests = () => {
         setError("");
 
         // 1️⃣ Get user data to retrieve bloodGroup
-        const userRes = await axios.get(`http://localhost:5000/users/${email}`);
+        const userRes = await axios.get(
+          `https://spondon-server.onrender.com/users/${email}`
+        );
         const bloodGroup = userRes.data?.bloodGroup;
 
         if (!bloodGroup) {
@@ -31,7 +33,7 @@ const DashboardRequests = () => {
 
         // 2️⃣ Fetch all requests matching donor's blood group
         const requestsRes = await axios.get(
-          `http://localhost:5000/requests?bloodGroup=${bloodGroup}`
+          `https://spondon-server.onrender.com/requests?bloodGroup=${bloodGroup}`
         );
 
         setRequests(Array.isArray(requestsRes.data) ? requestsRes.data : []);
@@ -50,7 +52,9 @@ const DashboardRequests = () => {
   // ✅ Accept request handler
   const handleAcceptRequest = async (id) => {
     try {
-      await axios.patch(`http://localhost:5000/requests/approve/${id}`);
+      await axios.patch(
+        `https://spondon-server.onrender.com/requests/approve/${id}`
+      );
 
       // Remove the approved request from the UI immediately
       setRequests((prev) => prev.filter((req) => req._id !== id));
