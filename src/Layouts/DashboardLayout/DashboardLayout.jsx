@@ -1,17 +1,18 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Provider/AuthContext";
 import axios from "axios";
+import { Outlet } from "react-router";
+import { FaBars } from "react-icons/fa";
+
 import DonorDashboardAside from "../../Pages/Dashboard/DonorDashboardAside/DonorDashboardAside";
 import VolunteerDashboardAside from "../../Pages/Dashboard/VoluenteerDashboardAside/VoluenteerDashboardAside";
-import { Outlet } from "react-router";
 import AdminDashboardAside from "../../Pages/AdminDashboardAside/AdminDashboardAside";
 
 const DashboardLayout = () => {
   const { user } = useContext(AuthContext);
   const [dbUser, setDbUser] = useState(null);
-
-  // Only for donor
   const [isActive, setIsActive] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Fetch user from backend
   useEffect(() => {
@@ -33,13 +34,19 @@ const DashboardLayout = () => {
     }
   }, [dbUser]);
 
-  if (!dbUser) return <p className="text-center mt-10">Loading dashboard...</p>;
+  if (!dbUser) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
 
-  // 🔹 Sidebar selection using if–else
-  let sidebar = null;
+  // 🔹 Sidebar selection
+  let SidebarComponent = null;
 
   if (dbUser.role === "donor") {
-    sidebar = (
+    SidebarComponent = (
       <DonorDashboardAside
         dbUser={dbUser}
         isActive={isActive}
@@ -47,20 +54,56 @@ const DashboardLayout = () => {
       />
     );
   } else if (dbUser.role === "volunteer") {
-    sidebar = <VolunteerDashboardAside dbUser={dbUser} />;
+    SidebarComponent = <VolunteerDashboardAside dbUser={dbUser} />;
   } else if (dbUser.role === "admin") {
-    sidebar = <AdminDashboardAside dbUser={dbUser} />;
+    SidebarComponent = <AdminDashboardAside dbUser={dbUser} />;
   }
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      {sidebar}
+    <div className="min-h-screen bg-base-200">
+      {/* Top bar (mobile only) */}
+      <div className="navbar bg-base-100 shadow lg:hidden">
+        <button className="btn btn-ghost" onClick={() => setSidebarOpen(true)}>
+          <FaBars size={22} />
+        </button>
+        <h2 className="font-semibold text-lg ml-2 capitalize">
+          {dbUser.role} Dashboard
+        </h2>
+      </div>
 
-      {/* Main content */}
-      <main className="flex-1 p-6">
-        <Outlet context={{ dbUser, isActive }} />
-      </main>
+      <div className="flex">
+        {/* Desktop Sidebar */}
+        <aside className="hidden lg:block w-64 min-h-screen bg-base-100 shadow">
+          {SidebarComponent}
+        </aside>
+
+        {/* Mobile Sidebar Drawer */}
+        {sidebarOpen && (
+          <div className="fixed inset-0 z-50 lg:hidden">
+            {/* Overlay */}
+            <div
+              className="absolute inset-0 bg-black bg-opacity-40"
+              onClick={() => setSidebarOpen(false)}
+            />
+
+            {/* Sidebar */}
+            <aside className="relative w-64 h-full bg-base-100 shadow-lg">
+              <button
+                className="btn btn-ghost absolute right-2 top-2"
+                onClick={() => setSidebarOpen(false)}
+              >
+                ✕
+              </button>
+              {SidebarComponent}
+            </aside>
+          </div>
+        )}
+
+        {/* Main content */}
+        <main className="flex-1 p-4 lg:p-6">
+          <Outlet context={{ dbUser, isActive }} />
+        </main>
+      </div>
     </div>
   );
 };

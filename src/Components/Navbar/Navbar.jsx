@@ -2,75 +2,108 @@ import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../Provider/AuthContext";
 import { showSuccess } from "../Alert/Alert";
-import { FaHeart } from "react-icons/fa";
+import { FaHeart, FaBars, FaUser } from "react-icons/fa";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
-  const navigator = useNavigate();
+  const navigate = useNavigate();
+
   const handleLogoutBtn = async () => {
     try {
       await logOut();
-
       showSuccess("Logged Out Successfully");
-
-      navigator("/");
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
-    <div className="navbar bg-base-100 justify-between">
-      <div className="">
-        <Link to={"/"} className="btn btn-ghost text-3xl text-[#880808]">
+    <div className="navbar bg-base-100 px-4">
+      {/* LEFT: Logo + Mobile Menu */}
+      <div className="navbar-start">
+        {/* Mobile Hamburger */}
+        <div className="dropdown lg:hidden">
+          <label tabIndex={0} className="btn btn-ghost">
+            <FaBars size={20} />
+          </label>
+          <ul
+            tabIndex={0}
+            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+          >
+            <li>
+              <Link to="/all-active-donors">
+                <FaUser className="text-green-500" />
+                All Active Donors
+              </Link>
+            </li>
+            <li>
+              <Link to="/dashboard">Dashboard</Link>
+            </li>
+            {!user && (
+              <li>
+                <Link to="/auth/login">Login</Link>
+              </li>
+            )}
+            {user && (
+              <li>
+                <button onClick={handleLogoutBtn}>Logout</button>
+              </li>
+            )}
+          </ul>
+        </div>
+
+        {/* Logo */}
+        <Link
+          to="/"
+          className="btn btn-ghost text-2xl lg:text-3xl text-[#880808]"
+        >
           SPONDON
         </Link>
       </div>
-      <div className="">
-        <Link to={"/all-active-donors"} className="btn btn-ghost text-lg">
-          <FaHeart className="text-green-500" />
+
+      {/* CENTER: Desktop Links */}
+      <div className="navbar-center hidden lg:flex">
+        <Link to="/all-active-donors" className="btn btn-ghost text-lg">
+          <FaUser className="text-green-500" />
           All Active Donors
         </Link>
       </div>
-      <div className="flex gap-3">
-        <div>
-          <Link to={"/dashboard"} className="btn ">
-            Dashboard
-          </Link>
-        </div>
-        <div>
-          {user ? (
-            <div className="flex gap-2">
-              <div className="dropdown dropdown-end">
-                <div
-                  tabIndex={0}
-                  role="button"
-                  className="btn btn-ghost btn-circle avatar"
-                >
-                  <div className="w-10 rounded-full">
-                    <img
-                      alt="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                      src={user?.photoURL}
-                    />
-                  </div>
-                </div>
-                <ul
-                  tabIndex="-1"
-                  className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
-                >
-                  <li>
-                    <button onClick={handleLogoutBtn}>Logout</button>
-                  </li>
-                </ul>
+
+      {/* RIGHT: Desktop Actions */}
+      <div className="navbar-end hidden lg:flex gap-3">
+        <Link to="/dashboard" className="btn">
+          Dashboard
+        </Link>
+
+        {user ? (
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle avatar"
+            >
+              <div className="w-10 rounded-full">
+                <img
+                  alt="User Avatar"
+                  src={user?.photoURL || "https://i.ibb.co/2kRZ5q0/user.png"}
+                />
               </div>
             </div>
-          ) : (
-            <div>
-              <Link to={"/auth/login"} className="btn">
-                Login
-              </Link>
-            </div>
-          )}
-        </div>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-40 p-2 shadow"
+            >
+              <li>
+                <button onClick={handleLogoutBtn}>Logout</button>
+              </li>
+            </ul>
+          </div>
+        ) : (
+          <Link to="/auth/login" className="btn">
+            Login
+          </Link>
+        )}
       </div>
     </div>
   );
