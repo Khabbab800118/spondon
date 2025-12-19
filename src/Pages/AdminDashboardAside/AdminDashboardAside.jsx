@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa";
 import { Link, NavLink } from "react-router";
 
-const AdminDashboardAside = ({ dbUser }) => {
+const AdminDashboardAside = () => {
   return (
     <aside className="w-64 min-h-screen bg-white shadow-lg p-6">
       <Link

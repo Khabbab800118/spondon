@@ -1,36 +1,56 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router";
+import { AuthContext } from "../../Provider/AuthContext";
 
 const AllActiveDonors = () => {
+  const { user } = useContext(AuthContext);
   const [donors, setDonors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false);
 
   useEffect(() => {
+    // Wait until user is loaded
+    if (!user?.email) return;
+
+    const fetchUserStatus = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/users/${user.email}`
+        );
+        setIsDisabled(res.data?.isDisabled || false);
+      } catch (err) {
+        console.error("Failed to fetch user status", err);
+      }
+    };
+
     const fetchDonors = async () => {
       try {
         setLoading(true);
         setError("");
-        const res = await axios.get("http://localhost:5000/active-donors");
 
+        const res = await axios.get("http://localhost:5000/active-donors");
         if (Array.isArray(res.data)) {
           setDonors(res.data);
         } else {
           console.warn("Unexpected API response:", res.data);
           setError("Unexpected API response");
         }
-
-        setLoading(false);
       } catch (err) {
         console.error("API error:", err);
         setError("Failed to fetch donors. Check console for details.");
+      } finally {
         setLoading(false);
       }
     };
 
+    fetchUserStatus();
     fetchDonors();
-  }, []);
+  }, [user?.email]);
+
+  // If user is not yet loaded
+  if (!user) return <p className="text-center mt-10">Loading user info...</p>;
 
   if (loading)
     return <p className="text-center mt-10">Loading active donors...</p>;
@@ -67,13 +87,13 @@ const AllActiveDonors = () => {
               <strong>Email:</strong> {donor.email}
             </p>
             <p>
-              <strong>Blood Group:</strong> {donor.bloodGroup}
+              <strong>Blood Group:</strong> {donor.bloodGroup || "N/A"}
             </p>
             <p>
-              <strong>Area:</strong> {donor.area}
+              <strong>Area:</strong> {donor.area || "N/A"}
             </p>
             <p>
-              <strong>District:</strong> {donor.district}
+              <strong>District:</strong> {donor.district || "N/A"}
             </p>
             <p>
               <strong>Role:</strong> {donor.role}
@@ -88,7 +108,17 @@ const AllActiveDonors = () => {
 
           {/* Send Request Button */}
           <div className="card-actions p-4">
-            <Link to={'/request'} className="btn">Click to send Request</Link>
+            <Link
+              to={"/request"}
+              className={`btn w-full text-center ${
+                isDisabled
+                  ? "bg-gray-400 cursor-not-allowed hover:bg-gray-400"
+                  : "bg-primary hover:bg-primary-focus"
+              }`}
+              onClick={(e) => isDisabled && e.preventDefault()}
+            >
+              {isDisabled ? "Request Disabled" : "Click to send Request"}
+            </Link>
           </div>
         </div>
       ))}
