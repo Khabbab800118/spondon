@@ -7,6 +7,7 @@ import {
   FaHeartbeat,
   FaChartBar,
   FaArrowAltCircleLeft,
+  FaTimesCircle,
 } from "react-icons/fa";
 import { Link, NavLink } from "react-router";
 
@@ -82,6 +83,17 @@ const AdminDashboardAside = () => {
           }
         >
           <FaHandHoldingHeart /> Manage Donations
+        </NavLink>
+        {/* Manage Canceled Requests */}
+        <NavLink
+          to="/dashboard/manage-canceled-requests"
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-4 py-2 rounded-lg transition ${
+              isActive ? "bg-blue-600 text-white" : "hover:bg-blue-100"
+            }`
+          }
+        >
+          <FaTimesCircle className="text-red-500" /> Manage Canceled Requests
         </NavLink>
 
         {/* Reports / Analytics */}

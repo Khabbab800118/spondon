@@ -19,6 +19,9 @@ import ManageRequests from "../Components/ManageRequests/ManageRequests";
 import ManageDonations from "../Components/ManageDonations/ManageDonations";
 import Reports from "../Components/Reports/Reports";
 import CanceledRequests from "../Components/CanceledRequests/CanceledRequests";
+import RejectedRequests from "../Components/RejectedRequests/RejectedRequests";
+import ManageCanceledRequests from "../Components/ManageCanceledRequests/ManageCanceledRequests";
+import AllRequests from "../Components/AllRequests/AllRequests";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "/all-active-donors",
         Component: AllActiveDonors,
+      },
+      {
+        path: "/all-requests",
+        Component: AllRequests,
       },
       {
         path: "/request",
@@ -98,6 +105,10 @@ const router = createBrowserRouter([
         Component: CanceledRequests,
       },
       {
+        path: "/dashboard/rejected-requests",
+        Component: RejectedRequests,
+      },
+      {
         path: "/dashboard/manage-users",
         Component: ManageUsers,
       },
@@ -112,6 +123,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/reports",
         Component: Reports,
+      },
+      {
+        path: "/dashboard/manage-canceled-requests",
+        Component: ManageCanceledRequests,
       },
     ],
   },

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Provider/AuthContext";
 import axios from "axios";
 
-const CanceledRequests = () => {
+const RejectedRequests = () => {
   const { user } = useContext(AuthContext);
   const loggedInUserEmail = user?.email;
 
@@ -38,7 +38,7 @@ const CanceledRequests = () => {
 
   // 🔹 Filter canceled requests by donorEmail
   const myCanceledRequests = canceledRequests.filter(
-    (request) => request.donorEmail === loggedInUserEmail
+    (request) => request.requesterEmail === loggedInUserEmail
   );
 
   if (myCanceledRequests.length === 0) {
@@ -71,10 +71,10 @@ const CanceledRequests = () => {
               <strong>Donation Time:</strong> {request.donationTime}
             </p>
             <p>
-              <strong>Email of donor who canceled:</strong> {request.canceledByEmail}
+              <strong>Status:</strong> {request.status}
             </p>
             <p>
-              <strong>Status:</strong> {request.status}
+              <strong>Email of donor who canceled:</strong> {request.canceledByEmail}
             </p>
             <p>
               <strong>Canceled At:</strong>{" "}
@@ -87,4 +87,4 @@ const CanceledRequests = () => {
   );
 };
 
-export default CanceledRequests;
+export default RejectedRequests;

@@ -52,6 +52,16 @@ const VolunteerDashboardAside = () => {
           My Pending Requests
         </NavLink>
         <NavLink
+          to="/dashboard/rejected-requests"
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-4 py-2 rounded-lg transition ${
+              isActive ? "bg-blue-600 text-white" : "hover:bg-blue-100"
+            }`
+          }
+        >
+          <FaTimesCircle className="text-red-500" /> Canceled Requests
+        </NavLink>
+        <NavLink
           to="/dashboard/accepted-requests"
           className={({ isActive }) =>
             `flex items-center gap-3 px-4 py-2 rounded-lg transition ${
@@ -61,7 +71,6 @@ const VolunteerDashboardAside = () => {
         >
           <FaCircleCheck /> Accepted Requests
         </NavLink>
-        
       </nav>
     </aside>
   );

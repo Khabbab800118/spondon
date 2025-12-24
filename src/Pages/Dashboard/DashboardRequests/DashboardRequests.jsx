@@ -7,8 +7,8 @@ const DashboardRequests = () => {
   const loggedInUserEmail = user?.email;
 
   const [dbUser, setDbUser] = useState(null);
-  const [requests, setRequests] = useState([]);
   const [loadingUser, setLoadingUser] = useState(true);
+  const [requests, setRequests] = useState([]);
   const [loadingRequests, setLoadingRequests] = useState(true);
   const [approvingId, setApprovingId] = useState(null);
   const [cancelingId, setCancelingId] = useState(null);
@@ -91,13 +91,24 @@ const DashboardRequests = () => {
     setCancelingId(request._id);
 
     try {
-      // 1️⃣ Add to canceledRequestsCollection
-      await axios.post("http://localhost:5000/canceled-requests", request);
+      // 1️⃣ Prepare canceled request
+      const canceledRequest = {
+        ...request,
+        status: "canceled", // ✅ mark as canceled
+        canceledAt: new Date(), // ✅ timestamp
+        canceledByEmail: loggedInUserEmail, // ✅ who canceled it
+      };
 
-      // 2️⃣ Delete from requestsCollection
+      // 2️⃣ Add to canceledRequestsCollection
+      await axios.post(
+        "http://localhost:5000/canceled-requests",
+        canceledRequest
+      );
+
+      // 3️⃣ Delete from requestsCollection
       await axios.delete(`http://localhost:5000/requests/${request._id}`);
 
-      // 3️⃣ Remove from UI
+      // 4️⃣ Remove from UI
       setRequests((prev) => prev.filter((r) => r._id !== request._id));
     } catch (error) {
       console.error("Failed to cancel request", error);

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import { AuthContext } from "../../Provider/AuthContext";
 import { showSuccess } from "../Alert/Alert";
 import { FaHeart, FaBars, FaUser } from "react-icons/fa";
@@ -64,10 +64,14 @@ const Navbar = () => {
 
       {/* CENTER: Desktop Links */}
       <div className="navbar-center hidden lg:flex">
-        <Link to="/all-active-donors" className="btn btn-ghost text-lg">
+        <NavLink to="/all-active-donors" className="btn btn-ghost text-lg">
           <FaUser className="text-green-500" />
           All Active Donors
-        </Link>
+        </NavLink>
+        <NavLink to="/all-requests" className="btn btn-ghost text-lg">
+          <FaUser className="text-red-500" />
+          All Blood Requests
+        </NavLink>
       </div>
 
       {/* RIGHT: Desktop Actions */}
