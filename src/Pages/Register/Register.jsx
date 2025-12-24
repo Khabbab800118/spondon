@@ -96,7 +96,7 @@ const Register = () => {
         area: role === "donor" ? area : null,
       };
 
-      await axios.post("https://spondon-server.onrender.com/users", newUser);
+      await axios.post("http://localhost:5000/users", newUser);
 
       await showSuccess(
         "Registration Successful!",

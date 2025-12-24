@@ -17,7 +17,7 @@ const AllActiveDonors = () => {
     const fetchUserStatus = async () => {
       try {
         const res = await axios.get(
-          `https://spondon-server.onrender.com/users/${user.email}`
+          `http://localhost:5000/users/${user.email}`
         );
         setIsDisabled(res.data?.isDisabled || false);
       } catch (err) {
@@ -30,9 +30,7 @@ const AllActiveDonors = () => {
         setLoading(true);
         setError("");
 
-        const res = await axios.get(
-          "https://spondon-server.onrender.com/active-donors"
-        );
+        const res = await axios.get("http://localhost:5000/active-donors");
         if (Array.isArray(res.data)) {
           setDonors(res.data);
         } else {

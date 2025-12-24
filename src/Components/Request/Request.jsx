@@ -39,9 +39,7 @@ const Request = () => {
   useEffect(() => {
     const fetchDonors = async () => {
       try {
-        const res = await axios.get(
-          "https://spondon-server.onrender.com/active-donors"
-        );
+        const res = await axios.get("http://localhost:5000/active-donors");
         setDonors(res.data);
       } catch (err) {
         console.error(err);
@@ -78,10 +76,7 @@ const Request = () => {
     setSuccessMsg("");
     try {
       const requestData = { ...formData, status: "pending" };
-      await axios.post(
-        "https://spondon-server.onrender.com/requests",
-        requestData
-      );
+      await axios.post("http://localhost:5000/requests", requestData);
       await showSuccess("Request submitted successfully!");
       setFormData((prev) => ({
         ...prev,

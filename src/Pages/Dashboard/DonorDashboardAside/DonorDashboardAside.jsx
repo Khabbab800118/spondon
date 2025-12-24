@@ -16,7 +16,7 @@ const DonorDashboardAside = ({ isActive, setIsActive, dbUser }) => {
     if (!dbUser?.email) return;
 
     axios
-      .get(`https://spondon-server.onrender.com/active-donors/${dbUser.email}`)
+      .get(`http://localhost:5000/active-donors/${dbUser.email}`)
       .then((res) => {
         setIsActive(res.data.isActive);
       })
@@ -29,15 +29,12 @@ const DonorDashboardAside = ({ isActive, setIsActive, dbUser }) => {
     try {
       if (!isActive) {
         // Activate donor
-        await axios.post(
-          "https://spondon-server.onrender.com/active-donors",
-          dbUser
-        );
+        await axios.post("http://localhost:5000/active-donors", dbUser);
         setIsActive(true);
       } else {
         // Deactivate donor
         await axios.delete(
-          `https://spondon-server.onrender.com/active-donors/${dbUser.email}`
+          `http://localhost:5000/active-donors/${dbUser.email}`
         );
         setIsActive(false);
       }
@@ -60,7 +57,7 @@ const DonorDashboardAside = ({ isActive, setIsActive, dbUser }) => {
 
       <nav className="space-y-4">
         <NavLink
-          to="/"
+          to="/dashboard"
           className={({ isActive }) =>
             `flex items-center gap-3 px-4 py-2 rounded-lg transition ${
               isActive ? "bg-red-600 text-white" : "hover:bg-red-100"

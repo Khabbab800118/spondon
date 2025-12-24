@@ -12,7 +12,7 @@ const ManageUsers = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("https://spondon-server.onrender.com/users");
+      const res = await axios.get("http://localhost:5000/users");
       setUsers(res.data);
     } catch (err) {
       console.error(err);
@@ -34,7 +34,7 @@ const ManageUsers = () => {
     }
 
     try {
-      await axios.patch(`https://spondon-server.onrender.com/users/${id}`, {
+      await axios.patch(`http://localhost:5000/users/${id}`, {
         isDisabled: !currentStatus,
       });
       setUsers((prev) =>
@@ -60,7 +60,7 @@ const ManageUsers = () => {
     if (!confirmed) return;
 
     try {
-      await axios.delete(`https://spondon-server.onrender.com/users/${id}`);
+      await axios.delete(`http://localhost:5000/users/${id}`);
       setUsers((prev) => prev.filter((user) => user._id !== id));
     } catch (err) {
       console.error(err);

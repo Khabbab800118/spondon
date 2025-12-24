@@ -15,9 +15,7 @@ const SentRequests = () => {
       if (!user?.email) return;
 
       try {
-        const res = await axios.get(
-          "https://spondon-server.onrender.com/requests"
-        );
+        const res = await axios.get("http://localhost:5000/requests");
         // Filter requests that belong to this user (volunteer)
         const myRequests = res.data.filter(
           (req) => req.requesterEmail === user.email
@@ -40,7 +38,7 @@ const SentRequests = () => {
 
     try {
       setDeletingId(id);
-      await axios.delete(`https://spondon-server.onrender.com/requests/${id}`);
+      await axios.delete(`http://localhost:5000/requests/${id}`);
       // Remove the deleted request from state
       setRequests((prev) => prev.filter((req) => req._id !== id));
       showSuccess("Request canceled successfully");

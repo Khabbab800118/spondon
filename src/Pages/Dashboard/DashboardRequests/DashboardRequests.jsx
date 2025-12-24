@@ -20,14 +20,12 @@ const DashboardRequests = () => {
 
         // 1️⃣ Fetch donor data from MongoDB
         const donorRes = await axios.get(
-          `https://spondon-server.onrender.com/users/${authUser.email}`
+          `http://localhost:5000/users/${authUser.email}`
         );
         setDonor(donorRes.data);
 
         // 2️⃣ Fetch all requests
-        const requestsRes = await axios.get(
-          `https://spondon-server.onrender.com/requests`
-        );
+        const requestsRes = await axios.get(`http://localhost:5000/requests`);
 
         // 3️⃣ Filter requests to match donor's blood group
         const donorBloodGroup = donorRes.data?.bloodGroup;
@@ -50,9 +48,7 @@ const DashboardRequests = () => {
 
   const handleAcceptRequest = async (id) => {
     try {
-      await axios.patch(
-        `https://spondon-server.onrender.com/requests/approve/${id}`
-      );
+      await axios.patch(`http://localhost:5000/requests/approve/${id}`);
 
       setRequests((prev) => prev.filter((req) => req._id !== id));
 
