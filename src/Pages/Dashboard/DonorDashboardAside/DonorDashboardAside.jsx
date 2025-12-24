@@ -7,6 +7,7 @@ import {
   FaToggleOff,
   FaHandHoldingHeart,
   FaArrowAltCircleLeft,
+  FaTimesCircle,
 } from "react-icons/fa";
 import { Link, NavLink } from "react-router";
 import axios from "axios";
@@ -97,6 +98,16 @@ const DonorDashboardAside = ({ isActive, setIsActive, dbUser }) => {
           }
         >
           <FaHandHoldingHeart /> My Donations
+        </NavLink>
+        <NavLink
+          to="/dashboard/canceled-requests"
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-4 py-2 rounded-lg transition ${
+              isActive ? "bg-blue-600 text-white" : "hover:bg-blue-100"
+            }`
+          }
+        >
+          <FaTimesCircle className="text-red-500" /> Canceled Requests
         </NavLink>
 
         <button

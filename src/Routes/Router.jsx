@@ -18,6 +18,7 @@ import ManageUsers from "../Components/ManageUsers/ManageUsers";
 import ManageRequests from "../Components/ManageRequests/ManageRequests";
 import ManageDonations from "../Components/ManageDonations/ManageDonations";
 import Reports from "../Components/Reports/Reports";
+import CanceledRequests from "../Components/CanceledRequests/CanceledRequests";
 
 const router = createBrowserRouter([
   {
@@ -91,6 +92,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/accepted-requests",
         Component: AcceptedRequests,
+      },
+      {
+        path: "/dashboard/canceled-requests",
+        Component: CanceledRequests,
       },
       {
         path: "/dashboard/manage-users",

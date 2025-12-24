@@ -6,6 +6,7 @@ import {
   FaPaperPlane,
   FaHourglassHalf,
   FaArrowAltCircleLeft,
+  FaTimesCircle,
 } from "react-icons/fa";
 import { FaCircleCheck } from "react-icons/fa6";
 
@@ -20,7 +21,7 @@ const VolunteerDashboardAside = () => {
       </Link>
       <nav className="space-y-4">
         <NavLink
-          to="/"
+          to="/dashboard"
           className={({ isActive }) =>
             `flex items-center gap-3 px-4 py-2 rounded-lg transition ${
               isActive ? "bg-blue-600 text-white" : "hover:bg-blue-100"
@@ -60,6 +61,7 @@ const VolunteerDashboardAside = () => {
         >
           <FaCircleCheck /> Accepted Requests
         </NavLink>
+        
       </nav>
     </aside>
   );
