@@ -18,7 +18,7 @@ const DonorDashboardAside = ({ isActive, setIsActive, dbUser }) => {
     if (!dbUser?.email) return;
 
     axios
-      .get(`http://localhost:5000/active-donors/${dbUser.email}`)
+      .get(`https://spondon-server.onrender.com/active-donors/${dbUser.email}`)
       .then((res) => {
         setIsActive(res.data.isActive);
       })
@@ -31,12 +31,15 @@ const DonorDashboardAside = ({ isActive, setIsActive, dbUser }) => {
     try {
       if (!isActive) {
         // Activate donor
-        await axios.post("http://localhost:5000/active-donors", dbUser);
+        await axios.post(
+          "https://spondon-server.onrender.com/active-donors",
+          dbUser
+        );
         setIsActive(true);
       } else {
         // Deactivate donor
         await axios.delete(
-          `http://localhost:5000/active-donors/${dbUser.email}`
+          `https://spondon-server.onrender.com/active-donors/${dbUser.email}`
         );
         setIsActive(false);
       }

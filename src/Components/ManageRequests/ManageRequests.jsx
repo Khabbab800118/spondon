@@ -19,7 +19,9 @@ const ManageRequests = () => {
   const fetchRequests = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/requests");
+      const res = await axios.get(
+        "https://spondon-server.onrender.com/requests"
+      );
       setRequests(res.data);
     } catch (err) {
       console.error(err);
@@ -41,7 +43,7 @@ const ManageRequests = () => {
     if (!confirmed) return;
 
     try {
-      await axios.delete(`http://localhost:5000/requests/${id}`);
+      await axios.delete(`https://spondon-server.onrender.com/requests/${id}`);
       // Remove deleted request from UI
       setRequests((prev) => prev.filter((req) => req._id !== id));
     } catch (err) {

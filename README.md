@@ -5,11 +5,12 @@ A full-stack blood donation management web application designed to connect donor
 ## Live Links
 
 - **Frontend (Client)**: [https://spondon-3d428.web.app/](https://spondon-3d428.web.app/)
-- **Backend (Server)**: [https://spondon-server.onrender.com/](https://spondon-server.onrender.com/)
+- **Backend (Server)**: [https://spondon-server.onrender.com](https://spondon-server.onrender.com)
 
 ## Technologies Used
 
 ### Frontend
+
 - React.js (with Vite for build tool)
 - Tailwind CSS
 - DaisyUI (Tailwind component library)
@@ -19,12 +20,14 @@ A full-stack blood donation management web application designed to connect donor
 - SweetAlert2 (for beautiful alerts)
 
 ### Backend
+
 - Node.js with Express.js
 - MongoDB (database)
 - CORS (Cross-Origin Resource Sharing)
 - Dotenv (environment variables management)
 
 ## Features
+
 - User registration and authentication
 - Donor profile management
 - Blood donation requests and searches

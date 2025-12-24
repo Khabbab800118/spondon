@@ -11,7 +11,9 @@ const ManageCanceledRequests = () => {
   const fetchCanceledRequests = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/canceled-requests");
+      const res = await axios.get(
+        "https://spondon-server.onrender.com/canceled-requests"
+      );
       setCanceledRequests(res.data);
     } catch (err) {
       console.error(err);
@@ -33,7 +35,9 @@ const ManageCanceledRequests = () => {
     if (!confirmed) return;
 
     try {
-      await axios.delete(`http://localhost:5000/canceled-requests/${id}`);
+      await axios.delete(
+        `https://spondon-server.onrender.com/canceled-requests/${id}`
+      );
       setCanceledRequests((prev) => prev.filter((r) => r._id !== id));
     } catch (err) {
       console.error("Failed to delete canceled request", err);

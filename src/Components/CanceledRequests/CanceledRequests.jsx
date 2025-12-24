@@ -15,7 +15,7 @@ const CanceledRequests = () => {
     const fetchCanceledRequests = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/canceled-requests?email=${loggedInUserEmail}`
+          `https://spondon-server.onrender.com/canceled-requests?email=${loggedInUserEmail}`
         );
         setCanceledRequests(res.data);
       } catch (error) {
@@ -71,7 +71,8 @@ const CanceledRequests = () => {
               <strong>Donation Time:</strong> {request.donationTime}
             </p>
             <p>
-              <strong>Email of donor who canceled:</strong> {request.canceledByEmail}
+              <strong>Email of donor who canceled:</strong>{" "}
+              {request.canceledByEmail}
             </p>
             <p>
               <strong>Status:</strong> {request.status}

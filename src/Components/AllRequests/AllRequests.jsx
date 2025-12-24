@@ -9,7 +9,9 @@ const AllRequests = () => {
   useEffect(() => {
     const fetchAllRequests = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/requests");
+        const res = await axios.get(
+          "https://spondon-server.onrender.com/requests"
+        );
         setRequests(res.data);
       } catch (error) {
         console.error("Failed to fetch requests", error);

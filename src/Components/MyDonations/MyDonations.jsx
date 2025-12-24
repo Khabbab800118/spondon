@@ -20,7 +20,7 @@ const MyDonations = () => {
 
         // GET all approved requests assigned to this donor
         const res = await axios.get(
-          `http://localhost:5000/approved-requests/donor/${email}`
+          `https://spondon-server.onrender.com/approved-requests/donor/${email}`
         );
         setDonations(Array.isArray(res.data) ? res.data : []);
       } catch (err) {

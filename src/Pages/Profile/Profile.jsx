@@ -10,7 +10,7 @@ const Profile = () => {
   useEffect(() => {
     if (user?.email) {
       axios
-        .get(`http://localhost:5000/users/${user.email}`)
+        .get(`https://spondon-server.onrender.com/users/${user.email}`)
         .then((res) => {
           setDbUser(res.data);
           setLoading(false);

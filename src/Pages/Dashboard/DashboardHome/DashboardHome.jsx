@@ -13,9 +13,7 @@ const DashboardHome = () => {
     if (dbUser?.role === "donor" && dbUser?.email) {
       axios
         .get(
-          `http://localhost:5000/approved-requests/donor/${
-            dbUser.email
-          }`
+          `https://spondon-server.onrender.com/approved-requests/donor/${dbUser.email}`
         )
         .then((res) => {
           // take latest 3 donations (reverse if needed)

@@ -20,7 +20,7 @@ const DashboardRequests = () => {
     const fetchUserFromDB = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/users/${loggedInUserEmail}`
+          `https://spondon-server.onrender.com/users/${loggedInUserEmail}`
         );
         setDbUser(res.data);
       } catch (error) {
@@ -37,7 +37,9 @@ const DashboardRequests = () => {
   useEffect(() => {
     const fetchAllRequests = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/requests");
+        const res = await axios.get(
+          "https://spondon-server.onrender.com/requests"
+        );
         setRequests(res.data);
       } catch (error) {
         console.error("Failed to fetch requests", error);
@@ -76,7 +78,9 @@ const DashboardRequests = () => {
     setApprovingId(id);
 
     try {
-      await axios.patch(`http://localhost:5000/requests/approve/${id}`);
+      await axios.patch(
+        `https://spondon-server.onrender.com/requests/approve/${id}`
+      );
 
       // Remove accepted request from UI
       setRequests((prev) => prev.filter((request) => request._id !== id));
@@ -101,12 +105,14 @@ const DashboardRequests = () => {
 
       // 2️⃣ Add to canceledRequestsCollection
       await axios.post(
-        "http://localhost:5000/canceled-requests",
+        "https://spondon-server.onrender.com/canceled-requests",
         canceledRequest
       );
 
       // 3️⃣ Delete from requestsCollection
-      await axios.delete(`http://localhost:5000/requests/${request._id}`);
+      await axios.delete(
+        `https://spondon-server.onrender.com/requests/${request._id}`
+      );
 
       // 4️⃣ Remove from UI
       setRequests((prev) => prev.filter((r) => r._id !== request._id));
@@ -140,6 +146,9 @@ const DashboardRequests = () => {
               </p>
               <p>
                 <strong>Requester:</strong> {request.requesterEmail}
+              </p>
+              <p>
+                <strong>Status:</strong> {request.status}
               </p>
               <div className="flex flex-col">
                 <button
