@@ -55,12 +55,12 @@ const SentRequests = () => {
   }
 
   if (requests.length === 0) {
-    return <p className="text-center mt-6">You have no pending requests.</p>;
+    return <p className="text-center mt-6">You have no inprogress requests.</p>;
   }
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-6">My Pending Requests</h2>
+      <h2 className="text-2xl font-bold mb-6">My inprogress Requests</h2>
       <div className="flex flex-wrap gap-6">
         {requests.map((req) => (
           <div

@@ -49,7 +49,7 @@ const VolunteerDashboardAside = () => {
           }
         >
           <FaHourglassHalf />
-          My Pending Requests
+          My inprogress Requests
         </NavLink>
         <NavLink
           to="/dashboard/rejected-requests"

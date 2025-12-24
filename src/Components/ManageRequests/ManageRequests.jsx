@@ -146,7 +146,7 @@ const ManageRequests = () => {
                         : "bg-yellow-100 text-yellow-600"
                     }`}
                   >
-                    {req.status || "pending"}
+                    {req.status || "inprogress"}
                   </span>
                 </td>
 

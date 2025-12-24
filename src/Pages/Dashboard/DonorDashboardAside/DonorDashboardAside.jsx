@@ -119,7 +119,7 @@ const DonorDashboardAside = ({ isActive, setIsActive, dbUser }) => {
           }
         >
           <FaHourglassHalf />
-          My Pending Requests
+          My inprogress Requests
         </NavLink>
         <button
           onClick={handleToggle}

@@ -72,10 +72,10 @@ const Request = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setStatus("pending");
+    setStatus("inprogress");
     setSuccessMsg("");
     try {
-      const requestData = { ...formData, status: "pending" };
+      const requestData = { ...formData, status: "inprogress" };
       await axios.post("http://localhost:5000/requests", requestData);
       await showSuccess("Request submitted successfully!");
       setFormData((prev) => ({
